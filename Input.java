@@ -16,16 +16,18 @@ public class Input
     // instance variables
     private int[][] inputs = new int[3823][1024];
     private int[] targetClass = new int[3823];
+    private int[][] testInputs = new int[1797][1024];
+    private int[] testTargets = new int [1797];
     /**
      * Constructor for objects of class Input
      */
-    public Input(String docName, String inputType)
+    public Input(String docName, String inputType, boolean isTest)
     {
         // initialise instance variables
-        readArguments(docName, inputType);
+        readArguments(docName, inputType, isTest);
     }
 
-    public void readArguments(String docName, String inputType) {
+    public void readArguments(String docName, String inputType, boolean isTest) {
 
         List<String> lines = new ArrayList<>();
         // Try reading in the file, if it fails, print out error message and exit program.
@@ -54,10 +56,11 @@ public class Input
 
             // Once in the coordinate section, read in the lines
             if(bitMapSection) {
+              if(!isTest){
                 int lnSize = line.length();
                 int lineIndex = 0;
-                
-         
+
+
                 if(inputType.equals("bm")){
                     if(localIndex >= 1024){
                         localIndex = 0;
@@ -73,11 +76,34 @@ public class Input
                             lineIndex++;
                             localIndex++;
                         }
-                        
+
                     }
                 }
+              }
+              else{
+                int lnSize = line.length();
+                int lineIndex = 0;
 
 
+                if(inputType.equals("bm")){
+                    if(localIndex >= 1024){
+                        localIndex = 0;
+                        //System.out.println("The target for this bm is : " + line + "with size " + lnSize);
+                        testTargets[targetIndex] = Character.getNumericValue(line.charAt(1));
+                        targetIndex++;
+                        inputIndex++;
+                    }
+                    else{
+                        while(lineIndex < lnSize){
+                            testInputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                            //System.out.print(line.charAt(lineIndex));
+                            lineIndex++;
+                            localIndex++;
+                        }
+
+                    }
+                }
+              }
              }
 
         }
@@ -85,14 +111,20 @@ public class Input
 
 
     }
-    
+    public int[][] getTestInputs(){
+      return testInputs;
+    }
+
+    public int[] getTestTargets(){
+      return testTargets;
+    }
     public int[][] getInputs(){
         return inputs;
     }
-    
+
     public int[] getTargets(){
         return targetClass;
     }
-    
-    
+
+
 }
