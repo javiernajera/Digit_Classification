@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=Input
+comment1.params=docName\ inputType
+comment1.target=Input(java.lang.String,\ java.lang.String)
+comment1.text=\n\ Constructor\ for\ objects\ of\ class\ Input\n
+comment2.params=docName\ inputType
+comment2.target=void\ readArguments(java.lang.String,\ java.lang.String)
+comment3.params=
+comment3.target=int[][]\ getInputs()
+comment4.params=
+comment4.target=int[]\ getTargets()
+numComments=5
