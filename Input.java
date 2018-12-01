@@ -78,6 +78,22 @@ public class Input
                         }
 
                     }
+                } 
+                // For the 8x8 downsampled image
+                else {
+                    if(localIndex >= 64){
+                        localIndex = 0;
+                        targetClass[targetIndex] = Character.getNumericValue(line.charAt(1));
+                        targetIndex++;
+                        inputIndex++;
+                    }
+                    else{
+                        while(lineIndex < lnSize){
+                            inputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                            lineIndex++;
+                            localIndex++;
+                        }
+                    }
                 }
               }
               else{
@@ -100,17 +116,30 @@ public class Input
                             lineIndex++;
                             localIndex++;
                         }
-
+                    }
+                }
+                // For the 8x8 downsampled image
+                else {
+                    if(localIndex >= 64){
+                        localIndex = 0;
+                        testTargets[targetIndex] = Character.getNumericValue(line.charAt(1));
+                        targetIndex++;
+                        inputIndex++;
+                    }
+                    else{
+                        while(lineIndex < lnSize){
+                            testInputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                            lineIndex++;
+                            localIndex++;
+                        }
                     }
                 }
               }
              }
 
         }
-
-
-
     }
+    
     public int[][] getTestInputs(){
       return testInputs;
     }
@@ -118,6 +147,7 @@ public class Input
     public int[] getTestTargets(){
       return testTargets;
     }
+    
     public int[][] getInputs(){
         return inputs;
     }

@@ -1,12 +1,16 @@
 #BlueJ class context
 comment0.target=Input
-comment1.params=docName\ inputType
-comment1.target=Input(java.lang.String,\ java.lang.String)
+comment1.params=docName\ inputType\ isTest
+comment1.target=Input(java.lang.String,\ java.lang.String,\ boolean)
 comment1.text=\n\ Constructor\ for\ objects\ of\ class\ Input\n
-comment2.params=docName\ inputType
-comment2.target=void\ readArguments(java.lang.String,\ java.lang.String)
+comment2.params=docName\ inputType\ isTest
+comment2.target=void\ readArguments(java.lang.String,\ java.lang.String,\ boolean)
 comment3.params=
-comment3.target=int[][]\ getInputs()
+comment3.target=int[][]\ getTestInputs()
 comment4.params=
-comment4.target=int[]\ getTargets()
-numComments=5
+comment4.target=int[]\ getTestTargets()
+comment5.params=
+comment5.target=int[][]\ getInputs()
+comment6.params=
+comment6.target=int[]\ getTargets()
+numComments=7
