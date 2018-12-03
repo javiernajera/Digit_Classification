@@ -50,7 +50,7 @@ public class testPerceptron
         //Perceptron percy = new Perceptron(inputSize);
         System.out.println("perceptron created!");
 
-        percy.trainPerceptron(in, target, 0.1);
+        percy.trainPerceptron(in, target, 0.01, 50);
         percy.evaluatePerceptron(testIn, testTargets);
 
     }
