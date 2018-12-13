@@ -18,13 +18,13 @@ public class testPerceptron
         String testDoc = args[1];
         String docType = args[2];
         Input input = new Input(trainDoc, docType, false);
-        int[][] in = input.getInputs();
+        double[][] in = input.getInputs();
         int inputSize = in[0].length;
         int[] target = input.getTargets();
 
         Input testInput = new Input(testDoc, docType, true);
 
-        int[][] testIn = testInput.getTestInputs();
+        double[][] testIn = testInput.getTestInputs();
         int[] testTargets = testInput.getTestTargets();
         /*
         for(int i = 0; i < testIn.length; i++){
@@ -50,7 +50,7 @@ public class testPerceptron
         //Perceptron percy = new Perceptron(inputSize);
         System.out.println("perceptron created!");
 
-        percy.trainPerceptron(in, target, 0.01, 50);
+        percy.trainPerceptron(in, target, 0.01, 200);
         percy.evaluatePerceptron(testIn, testTargets);
 
     }

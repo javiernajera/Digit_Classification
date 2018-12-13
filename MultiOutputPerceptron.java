@@ -14,9 +14,9 @@ public class MultiOutputPerceptron
     // instance variables - replace the example below with your own
     private int inputSize;
     private double[][] weights;
-    private int epochPrint = 100;
+    private int epochPrint = 50;
     private Random rand = new Random();
-    private static int NODES = 10;
+    private static int NODES = 6;
     private double[] losses = new double[NODES];
 
     /**
@@ -29,7 +29,7 @@ public class MultiOutputPerceptron
         initializeWeights();
     }
 
-    public void trainPerceptron(int[][] inputs, int[] target, double lr, int epochs){
+    public void trainPerceptron(double[][] inputs, int[] target, double lr, int epochs){
         int counter = 0;
         
         for (int j = 0;j < epochs; j++) {
@@ -53,7 +53,7 @@ public class MultiOutputPerceptron
         }
     }
     
-    public double trainWeights(int node, int target, int[] input, double lr){
+    public double trainWeights(int node, int target, double[] input, double lr){
         double rawClass = getRawClassification(node, input);
         double loss;
         if(target == node){
@@ -82,7 +82,7 @@ public class MultiOutputPerceptron
 
     }
 
-    public double getRawClassification(int node, int[] input){
+    public double getRawClassification(int node, double[] input){
         double rawClass = 0.0;
         double x = 0.0;
         for(int i = 0; i < input.length; i++){
@@ -102,7 +102,7 @@ public class MultiOutputPerceptron
         return rawClass;
     }
 
-    public double getRawClassificationTrain(int node, int[] input){
+    public double getRawClassificationTrain(int node, double[] input){
         double rawClass = 0.0;
         double x = 0.0;
         for(int i = 0; i < input.length; i++){
@@ -154,7 +154,7 @@ public class MultiOutputPerceptron
         }
     }
 
-    public void evaluatePerceptron(int[][] test, int[] target){
+    public void evaluatePerceptron(double[][] test, int[] target){
       double max = 0.0;
       double classification;
       int theClass = -1;

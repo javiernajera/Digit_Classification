@@ -14,10 +14,10 @@ import java.nio.file.Files;
 public class Input
 {
     // instance variables
-    private int[][] inputs = new int[3823][1024];
-    private int[] targetClass = new int[3823];
-    private int[][] testInputs = new int[1797][1024];
-    private int[] testTargets = new int [1797];
+    private double[][] inputs = new double[7352][561];
+    private int[] targetClass = new int[7352];
+    private double[][] testInputs = new double[2947][561];
+    private int[] testTargets = new int [2947];
     /**
      * Constructor for objects of class Input
      */
@@ -52,26 +52,26 @@ public class Input
             if(!bitMapSection && line.contains("0") && line.contains("1")){
                 bitMapSection = true;
             }
-
+            String[] lineArr = line.split("\\t"); 
 
             // Once in the coordinate section, read in the lines
             if(bitMapSection) {
               if(!isTest){
-                int lnSize = line.length();
+                int lnSize = lineArr.length;
                 int lineIndex = 0;
 
 
                 if(inputType.equals("bm")){
                     if(localIndex >= 1024){
-                        localIndex = 0;
+                        //localIndex = 0;
                         //System.out.println("The target for this bm is : " + line + "with size " + lnSize);
-                        targetClass[targetIndex] = Character.getNumericValue(line.charAt(1));
-                        targetIndex++;
-                        inputIndex++;
+                        //targetClass[targetIndex] = Double.parseDouble(lineArr[-1]);
+                        //targetIndex++;
+                        //inputIndex++;
                     }
                     else{
                         while(lineIndex < lnSize){
-                            inputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                            //inputs[inputIndex][localIndex] = Character.getNumericValue(lineArr.charAt(lineIndex));
                             //System.out.print(line.charAt(lineIndex));
                             lineIndex++;
                             localIndex++;
@@ -79,17 +79,19 @@ public class Input
 
                     }
                 } 
-                // For the 8x8 downsampled image
-                else {
-                    if(localIndex >= 64){
+                //For iPhone Movement Data
+                else if(inputType.equals("ip")){
+                    if(localIndex >= 561){
                         localIndex = 0;
-                        targetClass[targetIndex] = Character.getNumericValue(line.charAt(1));
+                        //System.out.println("The target for this bm is : " + line + "with size " + lnSize);
+                        targetClass[targetIndex] = Integer.parseInt(lineArr[561]);
                         targetIndex++;
                         inputIndex++;
                     }
                     else{
-                        while(lineIndex < lnSize){
-                            inputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                        while(lineIndex < (lnSize - 1)){
+                            inputs[inputIndex][localIndex] = Double.parseDouble(lineArr[localIndex]);
+                            //System.out.println(lineArr[561]);
                             lineIndex++;
                             localIndex++;
                         }
@@ -97,7 +99,7 @@ public class Input
                 }
               }
               else{
-                int lnSize = line.length();
+                int lnSize = lineArr.length;
                 int lineIndex = 0;
 
 
@@ -111,6 +113,7 @@ public class Input
                     }
                     else{
                         while(lineIndex < lnSize){
+                            System.out.print(line.charAt(Character.getNumericValue(line.charAt(lineIndex))));
                             testInputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
                             //System.out.print(line.charAt(lineIndex));
                             lineIndex++;
@@ -118,17 +121,19 @@ public class Input
                         }
                     }
                 }
-                // For the 8x8 downsampled image
-                else {
-                    if(localIndex >= 64){
+                else if(inputType.equals("ip")){
+                    if(localIndex >= 561){
                         localIndex = 0;
-                        testTargets[targetIndex] = Character.getNumericValue(line.charAt(1));
+                        //System.out.println("The target for this bm is : " + line + "with size " + lnSize);
+                        testTargets[targetIndex] = Integer.parseInt(lineArr[561]);
                         targetIndex++;
                         inputIndex++;
+                        //System.out.println(Arrays.toString(testInputs));
                     }
                     else{
-                        while(lineIndex < lnSize){
-                            testInputs[inputIndex][localIndex] = Character.getNumericValue(line.charAt(lineIndex));
+                        while(lineIndex < (lnSize - 1)){
+                            testInputs[inputIndex][localIndex] = Double.parseDouble(lineArr[localIndex]);
+                            //System.out.println(lnSize - 1);
                             lineIndex++;
                             localIndex++;
                         }
@@ -140,7 +145,7 @@ public class Input
         }
     }
     
-    public int[][] getTestInputs(){
+    public double[][] getTestInputs(){
       return testInputs;
     }
 
@@ -148,7 +153,7 @@ public class Input
       return testTargets;
     }
     
-    public int[][] getInputs(){
+    public double[][] getInputs(){
         return inputs;
     }
 
