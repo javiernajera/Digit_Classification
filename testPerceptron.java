@@ -15,43 +15,39 @@ public class testPerceptron
      */
     public static void main(String[] args) {
         String trainDoc= args[0];
-        String testDoc = args[1];
-        String docType = args[2];
+
+        String docType = args[1];
         Input input = new Input(trainDoc, docType, false);
         double[][] in = input.getInputs();
         int inputSize = in[0].length;
         int[] target = input.getTargets();
 
-        Input testInput = new Input(testDoc, docType, true);
+        //Input testInput = new Input(testDoc, docType, true);
 
-        double[][] testIn = testInput.getTestInputs();
-        int[] testTargets = testInput.getTestTargets();
-        /*
-        for(int i = 0; i < testIn.length; i++){
-            for(int j = 0; j < 1024; j++){
+      //  double[][] testIn = testInput.getTestInputs();
+      //  int[] testTargets = testInput.getTestTargets();
 
-                System.out.print(testIn[i][j]);
-                if((j+1) % 32 == 0){
-                    System.out.println("");
-                }
+        for(int i = 0; i < in.length; i++){
+            for(int j = 0; j < in[0].length; j++){
+
+                System.out.print(in[i][j] + " ");
+
 
             }
             System.out.println("This is input : " + i);
+            System.out.println("And this is the class: " + target[i]);
             System.out.println("Next Example");
         }
 
-        System.out.println("Here's the targets");
-        for(int i : testTargets){
-            System.out.println(i);
-        }
-        */
 
-        MultiOutputPerceptron percy = new MultiOutputPerceptron(inputSize);
+
+
+        //MultiOutputPerceptron percy = new MultiOutputPerceptron(inputSize);
         //Perceptron percy = new Perceptron(inputSize);
-        System.out.println("perceptron created!");
+        //System.out.println("perceptron created!");
 
-        percy.trainPerceptron(in, target, 0.01, 200);
-        percy.evaluatePerceptron(testIn, testTargets);
+        //percy.trainPerceptron(in, target, 0.01, 200);
+        //percy.evaluatePerceptron(testIn, testTargets);
 
     }
 

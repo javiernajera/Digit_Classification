@@ -46,16 +46,14 @@ public class Input
         int localIndex = 0;
         int targetIndex = 0;
         // Boolean which dictates when we are in the node coordinate section
-        boolean bitMapSection = false;
+
         for(String line: lines) {
             // Checks to see when we hit the node coordinate section
-            if(!bitMapSection && line.contains("0") && line.contains("1")){
-                bitMapSection = true;
-            }
-            String[] lineArr = line.split("\\t"); 
+
+            String[] lineArr = line.split("\\t");
 
             // Once in the coordinate section, read in the lines
-            if(bitMapSection) {
+
               if(!isTest){
                 int lnSize = lineArr.length;
                 int lineIndex = 0;
@@ -78,8 +76,8 @@ public class Input
                         }
 
                     }
-                } 
-                //For iPhone Movement Data
+                }
+                //For Samsung Movement Data
                 else if(inputType.equals("ip")){
                     if(localIndex >= 561){
                         localIndex = 0;
@@ -139,12 +137,12 @@ public class Input
                         }
                     }
                 }
-              }
+
              }
 
         }
     }
-    
+
     public double[][] getTestInputs(){
       return testInputs;
     }
@@ -152,7 +150,7 @@ public class Input
     public int[] getTestTargets(){
       return testTargets;
     }
-    
+
     public double[][] getInputs(){
         return inputs;
     }

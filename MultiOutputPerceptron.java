@@ -13,11 +13,13 @@ public class MultiOutputPerceptron
 {
     // instance variables - replace the example below with your own
     private int inputSize;
-    private double[][] weights;
+    private double[][] inputToHiddenW;
+    private double[][] hiddenToOutputW;
     private int epochPrint = 50;
     private Random rand = new Random();
     private static int NODES = 6;
     private double[] losses = new double[NODES];
+    private double[][] hVec;
 
     /**
      * Constructor for objects of class Perceptron
@@ -25,16 +27,63 @@ public class MultiOutputPerceptron
     public MultiOutputPerceptron(int inputSize)
     {
         this.inputSize = inputSize;
-        weights = new double[NODES][inputSize];
+
+        inputToHiddenW = new double[inputSize*2][inputSize];
+        hiddenToOutputW = new double[NODES][inputSize*2]
         initializeWeights();
     }
 
+    public void trainNN(double[][] inputs, int[] target, double lr, int epochs){
+
+
+        for(int i = 0; i < epochs; i++){
+          int input_length = inputs.length;
+
+          //printWeights();
+          double loss = 0.0;
+          for(int i = 0; i < input_length; i++){
+
+
+              if(counter % epochPrint == 0){
+                  //calcAverages(epochPrint, counter);
+
+              }
+          }
+
+        }
+
+    }
+
+    public double[][] feedForward(double[] input, int[] target){
+      double accum = 0.0;
+      double[][] hVec = new double[2][input.length*2];
+        for(int i = 0; i < inputToHiddenW.length; i++){
+          for(int j = 0; j < inputToHiddenW[0].length; j++){
+            accum += inputs[j] * inputToHiddenW[i][j];
+          }
+          hVec[0][i] = sigmoid(accum);
+        }
+
+        accum = 0;
+        for(int i = 0; i < hiddenToOutputW.length; i++){
+          for(int j = 0; j < hiddenToOutputW[0].length; j++){
+            accum += hVec[0][j]*hiddenToOutput[i][j];
+          }
+          hVec[1][i] = sigmoid(accum);
+        }
+    }
+
+    public void backpropagate(double[][] hVec){
+
+
+    }
+    /*
     public void trainPerceptron(double[][] inputs, int[] target, double lr, int epochs){
         int counter = 0;
-        
+
         for (int j = 0;j < epochs; j++) {
             int input_length = inputs.length;
-    
+
             //printWeights();
             double loss = 0.0;
             for(int i = 0; i < input_length; i++){
@@ -42,17 +91,18 @@ public class MultiOutputPerceptron
                   loss = trainWeights(node, target[i], inputs[i], lr);
 
                   losses[node] += loss;
-    
+
                 }
                 counter++;
                 if(counter % epochPrint == 0){
                     //calcAverages(epochPrint, counter);
-                   
+
                   }
             }
         }
     }
-    
+    */
+
     public double trainWeights(int node, int target, double[] input, double lr){
         double rawClass = getRawClassification(node, input);
         double loss;
@@ -70,7 +120,7 @@ public class MultiOutputPerceptron
 
         return loss;
     }
-    
+
     public void calcAverages(int num, int iter){
       System.out.println("Here are the averages for iteration " + iter + ": ");
       double average;
@@ -102,6 +152,12 @@ public class MultiOutputPerceptron
         return rawClass;
     }
 
+    public double sigmoid(double x){
+      double rawClass = 0.0;
+      rawClass = 1.0/(1+Math.exp((-1*x)));
+      return rawClass;
+    }
+
     public double getRawClassificationTrain(int node, double[] input){
         double rawClass = 0.0;
         double x = 0.0;
@@ -121,6 +177,11 @@ public class MultiOutputPerceptron
 
         return rawClass;
     }
+
+   /*
+    * This method simply is a helper method for debugging purposes
+    * it prints out the weights for the NN
+    */
     public void printWeights(){
         for(int i = 0; i < weights.length; i++){
             System.out.println("Here's weights for node: "  + i);
@@ -137,18 +198,35 @@ public class MultiOutputPerceptron
      */
     public void initializeWeights(){
         double weight;
-        for(int i = 0; i < NODES; i++){
-            for(int j = 0; j < weights[0].length; j++){
+        // initializing the weights for the input to hidden layer
+        for(int i = 0; i < inputToHiddenW.length; i++){
+            for(int j = 0; j < inputToHiddenW[0].length; j++){
               weight = rand.nextDouble();
               if(weight > 0.5){
-                weight = rand.nextDouble() * 0.5;
+                weight = rand.nextDouble() * 0.15;
                 //System.out.println(" Initialize!: " + weight);
-                weights[i][j] = weight;
+                inputToHiddenW[i][j] = weight;
               }
               else if (weight < -0.5){
-                weight = rand.nextDouble() * -0.5;
+                weight = rand.nextDouble() * -0.15;
                 //System.out.println(" Initialize!: " + weight);
-                weights[i][j] = weight;
+                inputToHiddenW[i][j] = weight;
+              }
+            }
+        }
+        // this initializes the weights from the hiddne layer to the output layer
+        for(int i = 0; i < hiddenToOutputW.length; i++){
+            for(int j = 0; j < hiddenToOutputW[0].length; j++){
+              weight = rand.nextDouble();
+              if(weight > 0.5){
+                weight = rand.nextDouble() * 0.15;
+                //System.out.println(" Initialize!: " + weight);
+                hiddenToOutputW[i][j] = weight;
+              }
+              else if (weight < -0.5){
+                weight = rand.nextDouble() * -0.15;
+                //System.out.println(" Initialize!: " + weight);
+                hiddenToOutputW[i][j] = weight;
               }
             }
         }
