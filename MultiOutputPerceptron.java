@@ -29,7 +29,7 @@ public class MultiOutputPerceptron
         this.inputSize = inputSize;
 
         inputToHiddenW = new double[inputSize*2][inputSize];
-        hiddenToOutputW = new double[NODES][inputSize*2]
+        hiddenToOutputW = new double[NODES][inputSize*2];
         initializeWeights();
     }
 
@@ -41,7 +41,7 @@ public class MultiOutputPerceptron
 
           //printWeights();
           double loss = 0.0;
-          for(int i = 0; i < input_length; i++){
+          for(int j = 0; i < input_length; j++){
 
 
               if(counter % epochPrint == 0){
@@ -67,14 +67,37 @@ public class MultiOutputPerceptron
         accum = 0;
         for(int i = 0; i < hiddenToOutputW.length; i++){
           for(int j = 0; j < hiddenToOutputW[0].length; j++){
-            accum += hVec[0][j]*hiddenToOutput[i][j];
+            accum += hVec[0][j]*hiddenToOutputW[i][j];
           }
           hVec[1][i] = sigmoid(accum);
         }
     }
 
-    public void backpropagate(double[][] hVec){
-
+    public void backpropagate(double[][] hVec, int target, double lr){
+        double[] inputHidSum = new double[];
+        for(int i = 0; i < hiddenToOutputW.length; i++){
+          if (i + 1 == target) {
+              losses[i] = 1 - hVec[1][i];
+          } else {
+              losses[i] = 0 - hVec[1][i];
+          }
+          double derivLoss = losses[i] * (losses[i] - 1);
+          for(int j = 0; j < hiddenToOutputW[0].length; j++){
+              hiddenToOutputW[i][j] = hiddenToOutputW[i][j] * lr * losses[i] * derivLoss;
+              inputHidSum += hiddenToOutputW[i][j] * ;
+          }
+        }
+        
+        for (int i = 0; i < NODES; ){
+        }
+        for(int i = 0; i < inputToHiddenW.length; i++){
+          double loss = 0;
+            for(int j = 0; j < inputToHiddenW[0].length; j++){
+            accum += inputs[j] * hiddenToOutput[i][j];
+            
+          }
+          
+        }
 
     }
     /*
@@ -103,7 +126,7 @@ public class MultiOutputPerceptron
     }
     */
 
-    public double trainWeights(int node, int target, double[] input, double lr){
+    public double trainWeights(int node, int target, double[] input, double lr,double weights){
         double rawClass = getRawClassification(node, input);
         double loss;
         if(target == node){

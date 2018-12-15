@@ -16,8 +16,8 @@ public class Input
     // instance variables
     private double[][] inputs = new double[7352][561];
     private int[] targetClass = new int[7352];
-    private double[][] testInputs = new double[2947][561];
-    private int[] testTargets = new int [2947];
+    private double[][] testInputs = new double[1474][561];
+    private int[] testTargets = new int [1474];
     /**
      * Constructor for objects of class Input
      */
@@ -126,11 +126,12 @@ public class Input
                         testTargets[targetIndex] = Integer.parseInt(lineArr[561]);
                         targetIndex++;
                         inputIndex++;
-                        //System.out.println(Arrays.toString(testInputs));
+                        System.out.println(Arrays.toString(testInputs[1472]));
                     }
                     else{
                         while(lineIndex < (lnSize - 1)){
                             testInputs[inputIndex][localIndex] = Double.parseDouble(lineArr[localIndex]);
+                            System.out.println(inputIndex);
                             //System.out.println(lnSize - 1);
                             lineIndex++;
                             localIndex++;
