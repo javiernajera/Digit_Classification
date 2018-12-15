@@ -73,30 +73,26 @@ public class MultiOutputPerceptron
         }
     }
 
-    public void backpropagate(double[][] hVec, int target, double lr){
-        double[] inputHidSum = new double[];
+    public void backpropagate(double[][] hVec, int target, double lr,double[] input){
+        //Represents the summation required to calculate weights connecting the input and hidden layers
+        double[] inputHidSum = new double[hiddenToOutputW[0].length];
         for(int i = 0; i < hiddenToOutputW.length; i++){
           if (i + 1 == target) {
               losses[i] = 1 - hVec[1][i];
           } else {
               losses[i] = 0 - hVec[1][i];
           }
-          double derivLoss = losses[i] * (losses[i] - 1);
+          double derivSigmoid = hVec[1][i] * (hVec[1][i] - 1);
           for(int j = 0; j < hiddenToOutputW[0].length; j++){
-              hiddenToOutputW[i][j] = hiddenToOutputW[i][j] * lr * losses[i] * derivLoss;
-              inputHidSum += hiddenToOutputW[i][j] * ;
+              hiddenToOutputW[i][j] = hiddenToOutputW[i][j] * lr * losses[i] * derivSigmoid;
+              inputHidSum[j] += hiddenToOutputW[i][j] * losses[i] * derivSigmoid * hVec[0][j];
           }
         }
         
-        for (int i = 0; i < NODES; ){
-        }
         for(int i = 0; i < inputToHiddenW.length; i++){
-          double loss = 0;
             for(int j = 0; j < inputToHiddenW[0].length; j++){
-            accum += inputs[j] * hiddenToOutput[i][j];
-            
+            inputToHiddenW[i][j] = inputToHiddenW[i][j] + (lr * input[j] * inputHidSum[i]);
           }
-          
         }
 
     }
