@@ -9,13 +9,13 @@
 import java.lang.*;
 import java.util.Random;
 
-public class MultiOutputPerceptron
+public class MultiOutputNN
 {
     // instance variables - replace the example below with your own
     private int inputSize;
     private double[][] inputToHiddenW;
     private double[][] hiddenToOutputW;
-    private int epochPrint = 50;
+    private int print = 100;
     private Random rand = new Random();
     private static int NODES = 6;
     private double[] losses = new double[NODES];
@@ -24,7 +24,7 @@ public class MultiOutputPerceptron
     /**
      * Constructor for objects of class Perceptron
      */
-    public MultiOutputPerceptron(int inputSize)
+    public MultiOutputNN(int inputSize)
     {
         this.inputSize = inputSize;
 
@@ -34,32 +34,39 @@ public class MultiOutputPerceptron
     }
 
     public void trainNN(double[][] inputs, int[] target, double lr, int epochs){
+        double[][] hVec;
+        int counter = 0;
+        lr = 0.5;
+        double totalLoss= 0.0;
 
-
-        for(int i = 0; i < epochs; i++){
+        for(int epoch = 0; epoch < epochs; epoch++){
           int input_length = inputs.length;
 
           //printWeights();
           double loss = 0.0;
-          for(int j = 0; i < input_length; j++){
 
-
-              if(counter % epochPrint == 0){
-                  //calcAverages(epochPrint, counter);
-
+          for(int i = 0; i < input_length; i++){
+              hVec = feedForward(inputs[i]);
+              loss = backpropagate(hVec, target[i], lr, inputs[i]);
+              totalLoss += loss;
+              if(counter % print == 0){
+                  double avg = totalLoss / print;
+                  System.out.print("Here's the loss for epoch: " + epoch + " at iteration" + counter + " : " + avg);
+                  totalLoss = 0;
               }
+              counter++;
           }
 
         }
 
     }
 
-    public double[][] feedForward(double[] input, int[] target){
+    public double[][] feedForward(double[] input){
       double accum = 0.0;
       double[][] hVec = new double[2][input.length*2];
         for(int i = 0; i < inputToHiddenW.length; i++){
           for(int j = 0; j < inputToHiddenW[0].length; j++){
-            accum += inputs[j] * inputToHiddenW[i][j];
+            accum += input[j] * inputToHiddenW[i][j];
           }
           hVec[0][i] = sigmoid(accum);
         }
@@ -71,9 +78,10 @@ public class MultiOutputPerceptron
           }
           hVec[1][i] = sigmoid(accum);
         }
+        return hVec;
     }
 
-    public void backpropagate(double[][] hVec, int target, double lr,double[] input){
+    public double backpropagate(double[][] hVec, int target, double lr,double[] input){
         //Represents the summation required to calculate weights connecting the input and hidden layers
         double[] inputHidSum = new double[hiddenToOutputW[0].length];
         for(int i = 0; i < hiddenToOutputW.length; i++){
@@ -84,61 +92,22 @@ public class MultiOutputPerceptron
           }
           double derivSigmoid = hVec[1][i] * (hVec[1][i] - 1);
           for(int j = 0; j < hiddenToOutputW[0].length; j++){
-              hiddenToOutputW[i][j] = hiddenToOutputW[i][j] * lr * losses[i] * derivSigmoid;
-              inputHidSum[j] += hiddenToOutputW[i][j] * losses[i] * derivSigmoid * hVec[0][j];
+              hiddenToOutputW[i][j] = hiddenToOutputW[i][j] + (lr * hVec[0][j] * losses[i] * derivSigmoid);
+              inputHidSum[j] += (hiddenToOutputW[i][j] * losses[i] * derivSigmoid);
           }
         }
-        
         for(int i = 0; i < inputToHiddenW.length; i++){
+            double derivSigmoid = hVec[0][i] * (hVec[0][i] - 1);
             for(int j = 0; j < inputToHiddenW[0].length; j++){
-            inputToHiddenW[i][j] = inputToHiddenW[i][j] + (lr * input[j] * inputHidSum[i]);
+            inputToHiddenW[i][j] = inputToHiddenW[i][j] + (lr * input[j] * inputHidSum[i] * derivSigmoid);
           }
         }
-
-    }
-    /*
-    public void trainPerceptron(double[][] inputs, int[] target, double lr, int epochs){
-        int counter = 0;
-
-        for (int j = 0;j < epochs; j++) {
-            int input_length = inputs.length;
-
-            //printWeights();
-            double loss = 0.0;
-            for(int i = 0; i < input_length; i++){
-                for(int node = 0; node < NODES; node++){
-                  loss = trainWeights(node, target[i], inputs[i], lr);
-
-                  losses[node] += loss;
-
-                }
-                counter++;
-                if(counter % epochPrint == 0){
-                    //calcAverages(epochPrint, counter);
-
-                  }
-            }
+        double totalLoss = 0.0;
+        for(double loss : losses){
+          totalLoss += loss;
         }
-    }
-    */
-
-    public double trainWeights(int node, int target, double[] input, double lr,double weights){
-        double rawClass = getRawClassification(node, input);
-        double loss;
-        if(target == node){
-          loss = 1 - rawClass;
-        }
-        else{
-          loss = 0 - rawClass;
-        }
-        //System.out.println(target + " - " + classified + " = " + loss);
-        double sigmoidDeriv = rawClass * (1-rawClass);
-        for(int i = 0; i < weights[0].length; i++){
-            weights[node][i] = weights[node][i] + (lr * input[i] * loss * sigmoidDeriv);
-        }
-
-        return loss;
-    }
+        return totalLoss;
+      }
 
     public void calcAverages(int num, int iter){
       System.out.println("Here are the averages for iteration " + iter + ": ");
@@ -151,70 +120,12 @@ public class MultiOutputPerceptron
 
     }
 
-    public double getRawClassification(int node, double[] input){
-        double rawClass = 0.0;
-        double x = 0.0;
-        for(int i = 0; i < input.length; i++){
-            //System.out.println(input[i] + " x " + weights[i] + " = " + input[i]*weights[i]);
-            x += input[i] * weights[node][i];
-        }
-        double denominator = (1+ Math.exp((-1*x)+0.5));
-        double euler = Math.exp((-1*x)+0.5);
-        /*
-        System.out.println("the x is: " + x);
-        System.out.println("the argument is: " + ((-1*x)+0.5));
-        System.out.println("the denominator is: " + denominator);
-        System.out.println("the euler is: " + euler);
-        */
-        rawClass = 1.0/(1+Math.exp((-1*x)+0.5));
-
-        return rawClass;
-    }
-
     public double sigmoid(double x){
       double rawClass = 0.0;
       rawClass = 1.0/(1+Math.exp((-1*x)));
       return rawClass;
     }
 
-    public double getRawClassificationTrain(int node, double[] input){
-        double rawClass = 0.0;
-        double x = 0.0;
-        for(int i = 0; i < input.length; i++){
-            //System.out.println(input[i] + " x " + weights[i] + " = " + input[i]*weights[i]);
-            x += input[i] * weights[node][i];
-        }
-        double denominator = (1+ Math.exp((-1*x)+0.5));
-        double euler = Math.exp((-1*x)+0.5);
-        /*
-        System.out.println("the x is: " + x);
-        System.out.println("the argument is: " + ((-1*x)+0.5));
-        System.out.println("the denominator is: " + denominator);
-        System.out.println("the euler is: " + euler);
-        */
-        rawClass = 1.0/(1+Math.exp((-1*x)));
-
-        return rawClass;
-    }
-
-   /*
-    * This method simply is a helper method for debugging purposes
-    * it prints out the weights for the NN
-    */
-    public void printWeights(){
-        for(int i = 0; i < weights.length; i++){
-            System.out.println("Here's weights for node: "  + i);
-            for(int j = 0; j < weights[0].length; j++){
-                System.out.println("input " + j + " is: " + weights[i][j]);
-            }
-        }
-    }
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
     public void initializeWeights(){
         double weight;
         // initializing the weights for the input to hidden layer
@@ -251,6 +162,7 @@ public class MultiOutputPerceptron
         }
     }
 
+    /*
     public void evaluatePerceptron(double[][] test, int[] target){
       double max = 0.0;
       double classification;
@@ -278,4 +190,5 @@ public class MultiOutputPerceptron
       System.out.println("Here's how many it got right: " + numCorrect);
       System.out.println("Here's how many it got wrong: " + numIncorrect);
     }
+    */
 }
