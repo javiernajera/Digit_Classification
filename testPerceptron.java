@@ -42,7 +42,7 @@ public class testPerceptron
 
 
 
-        //MultiOutputPerceptron percy = new MultiOutputPerceptron(inputSize);
+        //MultiOutputNN percy = new MultiOutputNN(inputSize);
         //Perceptron percy = new Perceptron(inputSize);
         //System.out.println("perceptron created!");
 

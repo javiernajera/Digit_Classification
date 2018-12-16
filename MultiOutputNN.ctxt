@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=MultiOutputNN
+comment1.params=inputSize
+comment1.target=MultiOutputNN(int)
+comment1.text=\n\ Constructor\ for\ objects\ of\ class\ Perceptron\n
+comment10.params=
+comment10.target=void\ initializeWeights()
+comment2.params=inputToHiddenW\ hiddenToOutputW
+comment2.target=MultiOutputNN(double[][],\ double[][])
+comment3.params=inputs\ target\ lr\ epochs
+comment3.target=void\ trainNN(double[][],\ int[],\ double,\ int)
+comment4.params=inputs\ target\ epochs
+comment4.target=double\ scoreNNPBIL(double[][],\ int[],\ int)
+comment5.params=input
+comment5.target=double[][]\ feedForward(double[])
+comment6.params=hVec\ target
+comment6.target=double\ lossesPBIL(double[][],\ int)
+comment7.params=hVec\ target\ lr\ input
+comment7.target=double\ backpropagate(double[][],\ int,\ double,\ double[])
+comment8.params=num\ iter
+comment8.target=void\ calcAverages(int,\ int)
+comment9.params=x
+comment9.target=double\ sigmoid(double)
+numComments=11

@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=PBIL
+comment1.params=
+comment1.target=PBIL()
+comment10.params=popVector
+comment10.target=double[]\ Mutate(double[])
+comment11.params=best\ fitness\ iteration
+comment11.target=void\ algorithmDone(Individual,\ double,\ int)
+comment2.params=args\ clauses\ numVariables\ numClauses
+comment2.target=void\ RunPBIL(java.lang.String[],\ int[][],\ int,\ int)
+comment3.params=
+comment3.target=double[][][]\ initializeWeights()
+comment4.params=args
+comment4.target=void\ ReadArguments(java.lang.String[])
+comment5.params=population\ clauses
+comment5.target=FitNode[]\ GenerateFitnessArray(Population,\ int[][])
+comment6.params=indie\ indieIndex
+comment6.target=double\ fitnessOf(Individual,\ int)
+comment7.params=popVector
+comment7.target=Population\ GeneratePop(double[])
+comment8.params=popVector\ best
+comment8.target=double[]\ PositiveUpdate(double[],\ Individual)
+comment9.params=popVector\ best\ worst
+comment9.target=double[]\ NegativeUpdate(double[],\ Individual,\ Individual)
+numComments=12

@@ -32,6 +32,13 @@ public class MultiOutputNN
         hiddenToOutputW = new double[NODES][inputSize*2];
         initializeWeights();
     }
+    
+    public MultiOutputNN(double[][] inputToHiddenW, double[][] hiddenToOutputW) {
+        this.inputToHiddenW = inputToHiddenW;
+        this.hiddenToOutputW = hiddenToOutputW;
+        
+        this.inputSize = inputToHiddenW[0].length;
+    }
 
     public void trainNN(double[][] inputs, int[] target, double lr, int epochs){
         double[][] hVec;
@@ -60,6 +67,33 @@ public class MultiOutputNN
         }
 
     }
+    
+    public double scoreNNPBIL(double[][] inputs, int[] target, int epochs){
+        double[][] hVec;
+        int counter = 0;
+        double lr = 0.5;
+        double totalLoss= 0.0;
+
+        for(int epoch = 0; epoch < epochs; epoch++){
+          int input_length = inputs.length;
+
+          //printWeights();
+          double loss = 0.0;
+
+          for(int i = 0; i < input_length; i++){
+              hVec = feedForward(inputs[i]);
+              loss = lossesPBIL(hVec, target[i]);
+              totalLoss += loss;
+              if(counter % print == 0){
+                  double avg = totalLoss / print;
+                  System.out.print("Here's the loss for epoch: " + epoch + " at iteration" + counter + " : " + avg);
+                  totalLoss = 0;
+              }
+              counter++;
+          }
+        }
+        return totalLoss;
+    }
 
     public double[][] feedForward(double[] input){
       double accum = 0.0;
@@ -79,6 +113,21 @@ public class MultiOutputNN
           hVec[1][i] = sigmoid(accum);
         }
         return hVec;
+    }
+    
+    public double lossesPBIL(double[][] hVec, int target) {
+        for(int i = 0; i < hiddenToOutputW.length; i++){
+          if (i + 1 == target) {
+              losses[i] = 1 - hVec[1][i];
+          } else {
+              losses[i] = 0 - hVec[1][i];
+          }
+        }
+        double totalLoss = 0.0;
+        for(double loss : losses){
+          totalLoss += loss;
+        }
+        return totalLoss;
     }
 
     public double backpropagate(double[][] hVec, int target, double lr,double[] input){
